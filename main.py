@@ -47,9 +47,6 @@ targets = targets[permute]
 # ================================================== #
 
 
-print(N)
-
-
 ##Building kernel-matrix
 kernel = numpy.zeros((N, N))
 
@@ -60,10 +57,6 @@ for i in range(0, N):
 P = numpy.outer(targets, targets)*kernel
 Q = numpy.ones(N)*-1
 H = numpy.zeros(N)
-
-
-
-print(P)
 
 
 ##Objective function
@@ -81,6 +74,8 @@ def zerofun(a):
             return False
     if(numpy.dot(a, targets) != 0):
         return False
+
+
 
 #Initial guess values
 start = numpy.zeros(N)
