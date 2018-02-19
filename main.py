@@ -63,13 +63,40 @@ H = numpy.zeros(N)
 
 
 
-print(targets)
+print(P)
+
 
 ##Objective function
-#def objective(a):
+def objective(a):
+    temp = 0
+    for i in range(N):
+        for j in range(N):
+            temp += 0.5*a[i]*a[j]*P
+    temp -= numpy.sum(a)
+    return temp
+
+def zerofun(a):
+    for i in range(0, len(a)):
+        if(a[i] < 0 or a[i] > C):
+            return False
+    if(numpy.dot(a, targets) != 0):
+        return False
+
+#Initial guess values
+start = numpy.zeros(N)
+B = [(0, None) for b in range(N)]
+XC ={'type':'eq', 'fun':zerofun}
+C = 5
 
 
-##Plotting the data
+ret = minimize(objective, start, bounds=B, constraints=XC)
+alpha = ret['x']
+
+
+# ================================================== #
+# Plotting data
+# ================================================== #
+
 plt.plot([p[0] for p in classA],
          [p[1] for p in classA],
          'b. ')
