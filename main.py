@@ -2,11 +2,29 @@ import numpy,random , math
 from scipy.optimize import minimize
 import matplotlib.pyplot as plt
 
+# ================================================== #
+# Kernel Functions
+# ================================================== #
+def linearKernel(x, y):
+    return numpy.dot(numpy.transpose(x), y) + 1
 
-##Setting seed for random
-random.seed(1234)
+def quadraticKernel(x, y):
+    return (numpy.dot(numpy.transpose(x), y)+1)**2
 
-##Generating test data
+sigma = 4
+
+def rbfKernel(x, y):
+    d = np.substract(x, y)
+    temp = -(numpy.dot(d, d)/(2*np.power(sigma, 2)))
+    return numpy.exp(temp)
+
+
+# ================================================== #
+# Generating data
+# ================================================== #
+
+random.seed(3000)
+
 classA = numpy.concatenate((numpy.random.randn(10, 2)*0.2+[1.5, 0.5],
                             numpy.random.randn(10, 2)*0.2 + [-1.5, 0.5]))
 classB = numpy.random.randn(20, 2)*0.2 +[0, -0.5]
@@ -24,6 +42,32 @@ random.shuffle(permute)
 inputs = inputs[permute, :]
 targets = targets[permute]
 
+# ================================================== #
+# SVM
+# ================================================== #
+
+
+print(N)
+
+
+##Building kernel-matrix
+kernel = numpy.zeros((N, N))
+
+for i in range(0, N):
+    for j in range(0, N):
+        kernel[i, j] = linearKernel([(inputs[i])[0], (inputs[i])[1]],[(inputs[j])[0], (inputs[j])[1]])
+
+P = numpy.outer(targets, targets)*kernel
+Q = numpy.ones(N)*-1
+H = numpy.zeros(N)
+
+
+
+print(targets)
+
+##Objective function
+#def objective(a):
+
 
 ##Plotting the data
 plt.plot([p[0] for p in classA],
@@ -32,6 +76,12 @@ plt.plot([p[0] for p in classA],
 plt.plot([p[0] for p in classB],
          [p[1] for p in classB],
          'r. ')
+
+##Plotting decision boundary
+xgrid = numpy.linspace(-5, 4)
+ygrid = numpy.linspace(-4, 4)
+
+
 
 plt.axis('equal')
 plt.show()
